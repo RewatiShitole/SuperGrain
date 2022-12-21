@@ -1,9 +1,20 @@
-import { Fragment} from 'react'
+import { Fragment, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import {createTableEntry} from './database'
+import { ref } from '@firebase/database';
 
-export default function ExampleModal({open, setOpen}) {
+export default function CreateModal({open, setOpen, refreshList, setRefreshList}) {
 
+  const colors = ['bg-pink-600', 'bg-purple-600', 'bg-yellow-500', 'bg-green-500']
+  const [workflowName, setWorkflowName] = useState("");
+
+  const createWorkflow = () => {
+    const id = new Date().getTime().toString();
+    const workflowColor = colors[Math.floor(Math.random() * colors.length)]
+    createTableEntry(id, workflowName, workflowColor)
+    setRefreshList(!refreshList)
+  }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -50,13 +61,12 @@ export default function ExampleModal({open, setOpen}) {
                     </Dialog.Title>
                     <div className="mt-4">
                       <div>
-                        <label htmlFor="email" className="sr-only">
-                          Email
-                        </label>
                         <input
                           type="email"
                           name="email"
                           id="email"
+                          value={workflowName}
+                          onChange={(event) => setWorkflowName(event.target.value)}
                           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500 sm:text-sm"
                           placeholder="Workflow name"
                         />
@@ -68,7 +78,11 @@ export default function ExampleModal({open, setOpen}) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-yellow-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick=
+                    {(evt) => {
+                      setOpen(false) 
+                      createWorkflow()
+                    }}
                   >
                     Create
                   </button>

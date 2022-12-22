@@ -28,7 +28,7 @@ export default function List() {
       )}>
       </div>
       <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
-        <div className="flex-1 truncate px-4 py-2 text-sm pb-4">
+        <div className="flex-1 truncate px-4 py-2 text-sm pb-4 pt-4">
           <href className="font-medium text-gray-900">
           {workflowArray[workflow].entryName}
           </href>

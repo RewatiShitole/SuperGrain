@@ -1,15 +1,15 @@
-import { Fragment, useState } from 'react'
+import { Fragment} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import {deleteTableEntry} from './database'
+import {deleteTableEntry} from '../Database/database'
 
 export default function DeleteModal({deleteModal, setDeleteModal, refreshList, setRefreshList, workflowId}) {
-  
 
-    const deleteWorkflow = () => {
-        deleteTableEntry(workflowId)
-        setRefreshList(!refreshList)
-        }
+  const deleteWorkflow = () => {
+      deleteTableEntry(workflowId)
+      setRefreshList(!refreshList)
+  }
+
   return (
     <Transition.Root show={deleteModal} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setDeleteModal}>
@@ -41,8 +41,7 @@ export default function DeleteModal({deleteModal, setDeleteModal, refreshList, s
                   <button
                     type="button"
                     className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => setDeleteModal(false)}
-                  >
+                    onClick={() => setDeleteModal(false)}>
                     <span className="sr-only">Close</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
@@ -69,16 +68,13 @@ export default function DeleteModal({deleteModal, setDeleteModal, refreshList, s
                     onClick={() => {
                         setDeleteModal(false) 
                         deleteWorkflow()
-                    }
-                    }
-                  >
+                      }}>
                     Delete
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                    onClick={() => setDeleteModal(false)}
-                  >
+                    onClick={() => setDeleteModal(false)}>
                     Cancel
                   </button>
                 </div>

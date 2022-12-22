@@ -1,11 +1,9 @@
 import React, { memo} from 'react';
 import { Handle, Position } from 'reactflow';
 
-
-const create = 100;
-
-
 function CustomNode({ id, data }) {
+  
+  const create = 100;
 
   return (
     <div className="border-1 bg-white px-4 py-5 sm:px-6 rounded-md shadow-md">
@@ -15,17 +13,17 @@ function CustomNode({ id, data }) {
             </div>
         </div>
         <Handle type="target" position={Position.Top} isConnectable={true} style={{
-  width: 10,
-  height: 10,
-  backgroundColor: 'black',
-  borderRadius: '50%',
+          width: 10,
+          height: 10,
+          backgroundColor: 'black',
+          borderRadius: '50%',
         }}/>
         <Handle id={create} type="target" position={Position.Left} />
         <Handle type="source" position={Position.Bottom}  style={{
-  width: 10,
-  height: 10,
-  backgroundColor: 'black',
-  borderRadius: '50%',
+          width: 10,
+          height: 10,
+          backgroundColor: 'black',
+          borderRadius: '50%',
         }}/>
     </div>
   );

@@ -5,30 +5,23 @@ import ReactFlow, {
   addEdge,
   useReactFlow,
   ReactFlowProvider,
-  useViewport,
   Controls,
   Background,
 } from 'reactflow';
 import { useLocation } from "react-router-dom";
-import 'reactflow/dist/style.css';
 
 import Sidebar from './Sidebar';
-
-import './index.css';
-
 import CustomNode from './CustomNode';
-import { writeWorkFlowData, readWorkFlowData } from "./database";
+import { writeWorkFlowData, readWorkFlowData } from "../Database/database";
 
-
+import '../index.css';
+import 'reactflow/dist/style.css';
 
 const nodeTypes = {
   custom: CustomNode,
 };
 
-
-
 const create = 100;
-
 
 const fitViewOptions = {
   padding: 3,
@@ -38,25 +31,18 @@ const options = { hideAttribution: true };
 
 
 function AddNodeOnEdgeDrop(){
-
-  const { x, y } = useViewport();
   
   const location = useLocation();
   const workflowId = location.state;
-  
   const reactFlowWrapper = useRef(null);
+
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
   const [selectedNode, setSelectedNode] = useState(null);
-
-
   const [rfInstance, setRfInstance] = useState(null);
-  const { getViewport, setViewport } = useReactFlow();
 
-  const { project, getNode } = useReactFlow();
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
-
+  const {setViewport, getNode} = useReactFlow();
+  
   const getNodeId = () => `randomnode_${+new Date()}`;
 
   useEffect(() => {
@@ -66,7 +52,6 @@ function AddNodeOnEdgeDrop(){
 
   useEffect(() => {
     setNodes((nds) =>
-    
       nds && nds.map((node) => {
         if (node.selected) {
           node.data = {
@@ -74,14 +59,25 @@ function AddNodeOnEdgeDrop(){
             label: selectedNode,
           };
         }
-       
         return node;
       })
     );
 
   }, [selectedNode, setNodes]);
 
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
+  const onNodeClick = useCallback((event, node) => {
+    setSelectedNode(node.data.label)
+  }, []);
+
+  const onNodesDelete = useCallback((node) => {
+    setSelectedNode(null)
+  }, []);
+
+  const onPaneClick = useCallback((event) => {
+    setSelectedNode(null)
+  }, []);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -91,14 +87,11 @@ function AddNodeOnEdgeDrop(){
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
-
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
-
       if (typeof type === 'undefined' || !type) {
         return;
       }
-
       const position = rfInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -107,26 +100,12 @@ function AddNodeOnEdgeDrop(){
         id: getNodeId(),
         type,
         position,
-        data: { label: `Added Node` },
+        data: { label: `New Node` },
       };
-
       setNodes((nds) => nds.concat(newNode));
     },
     [rfInstance]
   );
-
-  const onNodeClick = useCallback((event, node) => {
-    setSelectedNode(node.data.label)
-  }, []);
-
-
-  const onNodesDelete = useCallback((node) => {
-    setSelectedNode(null)
-  }, []);
-
-  const onPaneClick = useCallback((event) => {
-    setSelectedNode(null)
-  }, []);
 
   const onConnectStart = useCallback((event, node) => {
     if (node.handleId === create) {
@@ -137,7 +116,6 @@ function AddNodeOnEdgeDrop(){
         position: { x: getNode(node.nodeId).position.x, y: getNode(node.nodeId).position.y + 200 },
         data: { label: `New Node` },
       };
-
       setNodes((nds) => nds.concat(newNode));
       setEdges((eds) => eds.concat({ id, source: node.nodeId, target: id}));
     }
@@ -159,13 +137,9 @@ function AddNodeOnEdgeDrop(){
         setEdges(flow.flow.edges || []);
         setViewport({ x, y, zoom });
       }
-
     };
-
     restoreFlow();
   }, [setNodes, setViewport]);
-
-  
 
   return (
     <div className="wrapper" ref={reactFlowWrapper}>
@@ -193,8 +167,7 @@ function AddNodeOnEdgeDrop(){
             <button
               type="button"
               className="inline-flex items-center rounded-md border border-transparent bg-blue-900 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              onClick={onSave}
-            >
+              onClick={onSave}>
               Save
             </button>
           </div>
@@ -202,14 +175,10 @@ function AddNodeOnEdgeDrop(){
             <button
               type="button"
               className="inline-flex items-center rounded-md border border-transparent bg-blue-900 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              onClick={onRestore}
-            >
+              onClick={onRestore}>
               Restore
             </button>
           </div>
-    
-          
-
           <Sidebar />
           {selectedNode != null ?  
             <div className="col-span-2 mt-2">
@@ -224,22 +193,14 @@ function AddNodeOnEdgeDrop(){
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   placeholder="you@example.com"
                   value={selectedNode}
-                  onChange={(evt) => {
-                    setSelectedNode(evt.target.value)
-                    console.log(evt.target.value)
-                  }}
-                />
+                  onChange={(evt) => {setSelectedNode(evt.target.value)}}/>
               </div>
             </div> : <div></div>
           }
-          
         </div>
-      
       <Controls/>
       <Background variant="dots"/>
       </ReactFlow>
-      
-     
     </div>
   );
 };

@@ -1,12 +1,10 @@
 import { Fragment, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import {createTableEntry} from './database'
-
+import {createTableEntry} from '../Database/database'
 
 export default function CreateModal({open, setOpen, refreshList, setRefreshList}) {
 
-  
   const [workflowName, setWorkflowName] = useState("");
 
   const createWorkflow = () => {
@@ -79,7 +77,7 @@ export default function CreateModal({open, setOpen, refreshList, setRefreshList}
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-yellow-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick=
-                    {(evt) => {
+                    {() => {
                       setOpen(false) 
                       createWorkflow()
                     }}

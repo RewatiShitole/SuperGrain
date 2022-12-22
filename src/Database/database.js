@@ -1,8 +1,6 @@
 import { initializeApp} from 'firebase/app';
 import { getDatabase, ref, set, get, child  } from "firebase/database";
-import { resolvePath } from 'react-router';
-// Follow this pattern to import other Firebase services
-// import { } from 'firebase/<service>';
+
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_KEY,
@@ -18,17 +16,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// adding nodes and edges to a workflow in the db
 export function writeWorkFlowData(workflowId, flow) {
     set(ref(db, 'workflows/' + workflowId), {
         flow: flow
     });
 }
 
+// reading node and edges from a workflow from the db
 export async function readWorkFlowData(workflowId) {
     const dbRef = ref(db);
     var snapshot = await get(child(dbRef, `workflows/${workflowId}`)).then((snapshot) => {
         if (snapshot.exists()) {
-            // console.log(snapshot.val());
             return snapshot.val();
         } else {
             console.log("No data available");
@@ -39,6 +38,7 @@ export async function readWorkFlowData(workflowId) {
     return snapshot
 }
 
+// adding a workflow to the db
 export function createTableEntry(workflowId, entryName, workflowColor) {
     set(ref(db, 'entry/' + workflowId), {
         entryName: entryName,
@@ -47,27 +47,23 @@ export function createTableEntry(workflowId, entryName, workflowColor) {
     });
 }
 
+// deleting a workflow from the db
 export function deleteTableEntry(workflowId) {
-    // var adaRef = ref(db, 'entry/' + workflowId);
-    // adaRef.remove()
-    // .then(function() {
-    //     console.log("Remove succeeded.")
-    // })
-    // .catch(function(error) {
-    //     console.log("Remove failed: " + error.message)
-    // });
     set(ref(db, 'entry/' + workflowId), {
         entryName: null,
         workflowId: null,
         workflowColor: null
     });
+    set(ref(db, 'workflows/' + workflowId), {
+        flow: null
+    });
 }
 
+// retreiving all workflows from the db
 export async function readTableEntries() {
     const dbRef = ref(db);
     var snapshot = await get(child(dbRef, `entry/`)).then((snapshot) => {
         if (snapshot.exists()) {
-            console.log(snapshot.val());
             return snapshot.val();
         } else {
             console.log("No data available");

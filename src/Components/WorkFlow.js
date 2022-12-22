@@ -136,6 +136,9 @@ function AddNodeOnEdgeDrop(){
         setNodes(flow.flow.nodes || []);
         setEdges(flow.flow.edges || []);
         setViewport({ x, y, zoom });
+      } else {
+        setNodes([]);
+        setEdges([]);
       }
     };
     restoreFlow();

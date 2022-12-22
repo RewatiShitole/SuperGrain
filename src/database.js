@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp} from 'firebase/app';
 import { getDatabase, ref, set, get, child  } from "firebase/database";
 import { resolvePath } from 'react-router';
 // Follow this pattern to import other Firebase services
@@ -44,6 +44,22 @@ export function createTableEntry(workflowId, entryName, workflowColor) {
         entryName: entryName,
         workflowId: workflowId,
         workflowColor: workflowColor
+    });
+}
+
+export function deleteTableEntry(workflowId) {
+    // var adaRef = ref(db, 'entry/' + workflowId);
+    // adaRef.remove()
+    // .then(function() {
+    //     console.log("Remove succeeded.")
+    // })
+    // .catch(function(error) {
+    //     console.log("Remove failed: " + error.message)
+    // });
+    set(ref(db, 'entry/' + workflowId), {
+        entryName: null,
+        workflowId: null,
+        workflowColor: null
     });
 }
 

@@ -1,7 +1,8 @@
-import {ArrowRightCircleIcon } from '@heroicons/react/20/solid'
+import {ArrowRightCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from "react-router-dom";
 import React, {useState, useEffect} from "react";
 import CreateModal from './CreateModal';
+import DeleteModal from './DeleteModal';
 import {readWorkFlowData, readTableEntries} from "./database"
 
 
@@ -19,10 +20,12 @@ export default function List() {
     const [modal, setModal] = useState(false);
     const [workflowArray, setWorkflowArray] = useState([{}]);
     const [refreshList, setRefreshList] = useState(true);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [workflowId, setWorkflowId] = useState();
     
     const list = workflowArray? Object.keys(workflowArray).map(function(workflow) {
        
-        return (<li key={workflowArray[workflow].entryName}className="col-span-1 flex rounded-md shadow-sm">
+        return (<li key={workflowArray[workflow].entryName} className="col-span-1 flex rounded-md shadow-sm">
           <div
             className={classNames(
                 workflowArray[workflow].workflowColor,
@@ -39,6 +42,17 @@ export default function List() {
               
             </div>
             <div className="flex-shrink-0 pr-2">
+            <button
+                type="button"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                onClick={() => {
+                    setDeleteModal(true) 
+                    setWorkflowId(workflowArray[workflow].workflowId)}}
+              >
+                <span className="sr-only">Open options</span>
+                <TrashIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+           
               <button
                 type="button"
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -52,10 +66,6 @@ export default function List() {
         </li>)
        
             }): "";
-
-      
-
-      
 
       useEffect(() => {
           
@@ -87,6 +97,10 @@ export default function List() {
             <CreateModal open={modal} setOpen={setModal} refreshList={refreshList} setRefreshList={setRefreshList}
             />
           ) : null}
+        {deleteModal ? (
+        <DeleteModal deleteModal={deleteModal} setDeleteModal={setDeleteModal} refreshList={refreshList} setRefreshList={setRefreshList} workflowId = {workflowId}
+        />
+        ) : null}
     </div>
       <ul role="list" className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-1">
         {list}

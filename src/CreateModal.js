@@ -2,16 +2,16 @@ import { Fragment, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import {createTableEntry} from './database'
-import { ref } from '@firebase/database';
+
 
 export default function CreateModal({open, setOpen, refreshList, setRefreshList}) {
 
-  const colors = ['bg-pink-600', 'bg-purple-600', 'bg-yellow-500', 'bg-green-500']
+  
   const [workflowName, setWorkflowName] = useState("");
 
   const createWorkflow = () => {
     const id = new Date().getTime().toString();
-    const workflowColor = colors[Math.floor(Math.random() * colors.length)]
+    const workflowColor = 'bg-yellow-400'
     createTableEntry(id, workflowName, workflowColor)
     setRefreshList(!refreshList)
   }
@@ -42,7 +42,7 @@ export default function CreateModal({open, setOpen, refreshList, setRefreshList}
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-4 sm:w-full sm:max-w-sm sm:p-6">
                 <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
                   <button
                     type="button"
@@ -57,7 +57,7 @@ export default function CreateModal({open, setOpen, refreshList, setRefreshList}
                   
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-700">
-                      Create new Workflow
+                      Create New Workflow
                     </Dialog.Title>
                     <div className="mt-4">
                       <div>
